@@ -36,7 +36,7 @@ class WebdriverExtensions(webdriver.Chrome):
         """
         xpathはtextを囲んでいる要素を指す
         find_elementsを実行して、長さが0ならNoneを返す
-        None出ないなら、最初の要素を返す
+        0でなければ、最初の要素を返す
         """
         els = self.find_elements_by_xpath(xpath)
         if len(els) == 0:
