@@ -1,5 +1,7 @@
+import pickle
 import tkinter as tk
-from tkinter import Widget, filedialog
+from tkinter import filedialog
+import os
 
 
 class WidgetVar(tk.StringVar):
@@ -16,20 +18,67 @@ class WidgetVar(tk.StringVar):
         super().__init__(value=value)
 
 
-class WidgetsHolder:
-    """
-    gui.Widgetsできれいにそろってるのに、addしなきゃいけないwidgetだけインデントずれるのがちょっと嫌だ
-    """
-
+class WidgetVarHolder:
     def __init__(self):
-        self.widgets_dict = dict()
+        self.widget_var_dict = dict()
 
-    def add(self, widget_name, widget):
-        self.widgets_dict[widget_name] = widget
+    def set(self, widget_var_dict):
+        """
+        初期値などをセットする
+        """
+        self.widget_var_dict = widget_var_dict
 
-    def get(self, widget_name):
-        widget = self.widgets_dict[widget_name]
-        return widget
+    def add(self, widget_var_name, widget_var):
+        """
+        ウィジェット変数を追加
+        """
+        self.widget_var_dict[widget_var_name] = widget_var
+
+    def get(self, widget_var_name):
+        """
+        ウィジェット変数名からウィジェット変数を取り出す
+        """
+        widget_var = self.widget_var_dict[widget_var_name]
+        return widget_var
+
+    def load(self, path) -> bool:
+        """
+        文字列に変換されて保存されているdictをWidgetVarにして読み込む。  
+        読み込みに成功したらTrue、失敗したらFalse
+        """
+        # ファイルが存在しなかったら終了
+        if not os.path.exists(path):
+            return False
+
+        # ファイルサイズがゼロなら終了
+        if os.path.getsize(path) == 0:
+            return False
+
+        # 文字列型のdictを読み込む
+        with open(path, 'rb') as f:
+            parsed_dict = pickle.load(f)
+
+        # 文字列をWidgetVar型に変換
+        for k, v in parsed_dict.items():
+            self.widget_var_dict[k] = WidgetVar(v)
+
+        return True
+
+    def save(self, path):
+        """
+        pickleにして保存する
+        WidgetVarを文字列に変換
+        """
+        # 文字列を抜き出してparsed_dictへ
+        parsed_dict = dict()
+        for k, v in self.widget_var_dict.items():
+            parsed_dict[k] = v.get()
+
+        # 保存
+        with open(path, 'wb') as f:
+            pickle.dump(parsed_dict, f)
+
+        print(parsed_dict)
 
 
 def root(title, geometry):
@@ -142,7 +191,7 @@ def folder_selector(parent, label_var, entry_var):
 
     # 関数の定義
     def select_folder():
-        path = filedialog.askopenfilename()
+        path = filedialog.askdirectory()
         entry_var.set(path)
 
     # 構築
