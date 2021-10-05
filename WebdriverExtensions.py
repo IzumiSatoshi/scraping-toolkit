@@ -35,15 +35,27 @@ class WebdriverExtensions(webdriver.Chrome):
     def find_text(self, xpath):
         """
         xpathはtextを囲んでいる要素を指す
+        見つからなかったらNoneを返す
+        """
+        texts = self.find_texts(xpath)
+
+        if texts is None:
+            return None
+
+        text = texts[0]
+        return text
+
+    def find_texts(self, xpath):
+        """
+        xpathはtextを囲んでいる要素を指す
         find_elementsを実行して、長さが0ならNoneを返す
-        0でなければ、最初の要素を返す
         """
         els = self.find_elements_by_xpath(xpath)
         if len(els) == 0:
             return None
 
-        text = els[0].text
-        return text
+        texts = [el.text for el in els]
+        return texts
 
     def find_href(self, xpath):
         """
