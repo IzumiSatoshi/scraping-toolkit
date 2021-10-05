@@ -14,10 +14,9 @@ def read(path):
     失敗したらNoneが返される
     エラーハンドリングが微妙かも
     """
-    extension = os.path.splitext(path)[-1]
+    extension = get_extension(path)
 
     df = None
-
     if extension == '.xlsx':
         df = pd.read_excel(path)
     elif extension == '.csv':
@@ -34,8 +33,8 @@ def write(df, path):
     出力先ファイルのパスの拡張子から、出力ファイル形式を自動で判断する。
     エラーハンドリングが微妙かも
     """
-    extension = os.path.splitext(path)[-1]
 
+    extension = get_extension(path)
     if extension == ".xlsx":
         write_as_xlsx(df, path)
     elif extension == ".csv":
@@ -43,6 +42,17 @@ def write(df, path):
     else:
         print("未知の拡張子が指定されました。保存できません。")
         raise ValueError
+
+
+def get_extension(path):
+    """
+    .xlsxまたは.csvなら、拡張子を返す
+    それ以外ならNoneを返す
+    """
+    extension = os.path.splitext(path)[-1]
+    if extension == ".xlsx" or extension == '.csv':
+        return extension
+    return None
 
 
 def write_as_xlsx(df, path):
@@ -68,16 +78,17 @@ def write_as_csv(df, path):
 
 def check_file_access(path) -> bool:
     """
-    指定されたファイルの読み書きができるかを確認
+    指定されたファイルの読み書きができるかを確かめる
+    存在しなければ、拡張子チェックだけしてパスする
     """
-    df = pd.DataFrame()
+
+    if not os.path.exists(path):
+        if get_extension(path) is None:
+            return False
+        return True
 
     try:
         df = read(path)
-    except:
-        return False
-
-    try:
         write(df, path)
     except:
         return False
