@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from tkinter import messagebox
 
 """
-Pythonの命名方法とかは無視して、Reactに寄せた書き方にしてみる。
+コンポーネントの関数名はPythonの命名方法とかは無視して、Reactに寄せた書き方にしてみる。
 パフォーマンスに問題があるかは分からん。
 あんまり具体的すぎるコンポーネントを追及するのはやめようかな。切りがないし。
 """
