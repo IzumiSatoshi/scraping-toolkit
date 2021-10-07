@@ -1,3 +1,7 @@
+# Get started
+`
+pip install git+https://github.com/IzumiSatoshi/scraping-toolkit.git
+`
 # 概要
 スクレイピングツールを作るときに、同じような部分を抽象化していきたくなったので作った。  
 目標は、できるだけ頭を使わずにコーディングできるようにすること。  
