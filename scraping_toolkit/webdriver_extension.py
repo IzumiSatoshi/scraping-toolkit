@@ -126,3 +126,6 @@ class WebdriverExtension():
 
     def execute_script(self, script, *args):
         self._driver.execute_script(script, *args)
+
+    def quit(self):
+        self._driver.quit()
