@@ -5,7 +5,7 @@ https://deepblue-ts.co.jp/python/pypi-oss-package/
 import setuptools
 from os import path
 
-version = '1.2'
+version = '1.3'
 package_name = "scraping_toolkit"
 root_dir = path.abspath(path.dirname(__file__))
 
