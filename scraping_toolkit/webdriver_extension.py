@@ -126,23 +126,3 @@ class WebdriverExtension():
 
     def execute_script(self, script, *args):
         self._driver.execute_script(script, *args)
-
-    def wait_until_to_be_clickable(self, xpath, timeout=30):
-
-        end_time = time.time() + timeout
-        print('end = ', end_time)
-        while True:
-            try:
-                els = self.find_elements(xpath, timeout=timeout)
-                for el in els:
-                    el.click()
-                print('break')
-                break
-            except exceptions.StaleElementReferenceException:
-                print('err')
-                time.sleep(0.5)
-
-            if time.time() > end_time:
-                break
-
-        print('now = ', time.time())
